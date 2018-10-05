@@ -3,11 +3,12 @@
 #include<string.h>
 #include"agenda.h"
 
-void main(){
-	//crio a lista de Iniciais
+int main(){
 	Inicial *iniciais;
 	iniciais = NULL;
 	
+	Favorito *favoritos;
+	favoritos = NULL;
 	while(1){
 		printf("\tAGENDA DE CONTATOS\n\n");
 		int opcao = menu();
@@ -16,12 +17,36 @@ void main(){
 			case 1:{
 				Contato *novo;
 				novo = (Contato*) malloc(sizeof(Contato));
-				novo = pedirDados(novo);
+				pedirDados(novo);
 				iniciais = inserirNaListaDeIniciais(novo, iniciais);
+				break;
+			}
+			case 2:{
+				//remover();
+				break;
+			}
+			case 3:{
+				mostrarTodos(iniciais);
 				break;
 			}
 			case 4:{
 				mostrarIniciais(iniciais);
+				break;
+			}
+			case 5:{
+				favoritos = favoritar(iniciais, favoritos);
+				break;
+			}
+			case 6:{
+				mostrarFavoritos(favoritos);
+				break;
+			}
+			case 7:{
+				//emoverFavoritos();
+				break;
+			}
+			case 8:{
+				return 0;
 				break;
 			}
 			default:{
@@ -31,5 +56,6 @@ void main(){
 				break;
 			}
 		}
-	}	
+	}
+	return 0;	
 }
