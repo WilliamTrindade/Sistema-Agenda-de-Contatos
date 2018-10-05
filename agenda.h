@@ -1,4 +1,3 @@
-//-------------------------------------------------------------------
 typedef struct contato{
 	char nome[50], sobrenome[50], telefone[50], email[50];
 	struct contato *prox;
@@ -15,26 +14,27 @@ typedef struct favorito{
 	struct favorito *prox;
 }Favorito;
 
-//-------------------------------------------------------------------
+//EXIBIR O MENU 
 int menu(){
 	int opcao;
-	printf("1 - Inserir\n\n");
-	printf("2 - Remover\n\n");
-	printf("3 - Mostrar Todos\n\n");
-	printf("4 - Mostrar Iniciais\n\n");
-	printf("5 - Favoritar\n\n");
-	printf("6 - Mostrar Favoritos\n\n");
-	printf("7 - Remover Favorito\n\n");
-	printf("8 - Sair\n\n> ");
+	printf("1 - INSERIR\n\n");
+	printf("2 - REMOVER\n\n");
+	printf("3 - MOSTRAR TODOS\n\n");
+	printf("4 - MOSTRAR INICIAIS\n\n");
+	printf("5 - FAVORITAR\n\n");
+	printf("6 - MOSTRAR FAVORITOS\n\n");
+	printf("7 - REMOVER FAVORITO\n\n");
+	printf("8 - SAIR\n\n> ");
 	scanf("%d", &opcao);
 	return opcao;
 }
 
-void pedirDados(Contato *novo){	
+//PEDIR OS DADOS AO USER
+void pedirDados(Contato *novo){
 	printf("\tAGENDA DE CONTATOS > NOVO CONTATO\n\n");
 	printf("NOME: ");
 	fflush(stdin);
-	gets(novo->nome);
+	gets(novo->nome);	
 	printf("SOBRENOME: ");
 	gets(novo->sobrenome);
 	printf("TELEFONE :");
@@ -42,11 +42,12 @@ void pedirDados(Contato *novo){
 	printf("E-MAIL: ");
 	gets(novo->email);
 	
-	printf("\n\nDados Inseridos com sucesso! \n\n");	
+	printf("\n\nDADOS INSERIDOS COM SUCESSO! \n\n");	
 	system("pause");
 	system("cls");
 }
 
+//MOSTRAR UMA LISTA DE CONTATOS
 void exibeContatos(Contato *contatos){
 	Contato *p;
 	for(p=contatos;p!=NULL;p=p->prox){
@@ -61,13 +62,20 @@ void exibeContatos(Contato *contatos){
 	}
 }
 
+//PROCURA A INICIAL
 void mostrarContato(Inicial *iniciais,char letra){
 	Inicial *p;
+	int letraExiste = 0;
 	printf("\tAGENDA DE CONTATOS > CONTATOS > LETRA %c\n", letra);
 	for(p=iniciais;p!=NULL;p=p->prox){
 		if(letra == p->letra){
+			letraExiste = 1;
+			//CHAMA A FUNÇÃO PARA MOSTRAR OS CONTATOS DA INICIAL ENCONTRADA
 			exibeContatos(p->listaDeContatos);
 		}
+	}
+	if(letraExiste == 0){
+		printf("\nESSA INICIAL NAO EXISTE\n\n");
 	}
 }
 
@@ -180,13 +188,14 @@ remover(){
 Favorito *inserirNosFavoritos(Favorito *favoritos, Contato *contato){
 	Favorito *novo;
 	Favorito *p;
-	if(favoritos==NULL){
-		novo=(Favorito*) malloc(sizeof(Favorito));
-		novo->prox=NULL;
-		novo->contato = contato;
+	
+	novo=(Favorito*) malloc(sizeof(Favorito));
+	novo->prox=NULL;
+	novo->contato =  contato;
 		
+	if(favoritos==NULL){		
 		//mensagem de sucesso
-		printf("\nContato adicionado com Sucesso!");
+		printf("\nCONTATO ADICIONADO COM SUCESSO! ");
 		printf("\nNOME: ");
 		puts(novo->contato->nome);
 		printf("SOBRENOME: ");
@@ -197,19 +206,16 @@ Favorito *inserirNosFavoritos(Favorito *favoritos, Contato *contato){
 		puts(novo->contato->email);
 		printf("\n");
 		system("pause");
-		
+		system("cls");
 		return novo;
 	}
 	
 	for(p=favoritos;p->prox!=NULL;p=p->prox);
-	novo = (Favorito*) malloc(sizeof(Favorito));
-	novo->contato = contato;
-	novo->prox = NULL;
 	
 	p->prox = novo;
 	
 	//mensagem de sucesso
-	printf("\nContato adicionado com Sucesso!");
+	printf("\nCONTATO ADICIONADO COM SUCESSO! ");
 	printf("\nNOME: ");
 	puts(novo->contato->nome);
 	printf("SOBRENOME: ");
@@ -220,11 +226,11 @@ Favorito *inserirNosFavoritos(Favorito *favoritos, Contato *contato){
 	puts(novo->contato->email);
 	printf("\n");
 	system("pause");
-		
+	system("cls");
 	return favoritos;
 }
 
-int verificaNome(Inicial *iniciais, char nome[50], Favorito *favoritos){
+Contato *verificaNome(Inicial *iniciais, char nome[50]){
 	char letra = toupper(nome[0]);
 	Inicial *p;
 	Contato *k;
@@ -232,48 +238,52 @@ int verificaNome(Inicial *iniciais, char nome[50], Favorito *favoritos){
 		if(letra == p->letra){
 			for(k=p->listaDeContatos;k!=NULL;k=k->prox){
 				if(strcmp(nome, k->nome) == 0){
-					favoritos = inserirNosFavoritos(favoritos, k);
-					return 1;
+					return k;
 				}
 			}
 		}
 	}
-	printf("\nNome nao existe! \n");
+	printf("\nNOME NAO EXISTE! \n");
 	system("pause");
 	system("cls");
-	return 0;
+	return NULL;
 }
 
 Favorito *favoritar(Inicial *iniciais, Favorito *favoritos){
 	char nome[50];
-	int nomeExiste;
-	while(nomeExiste == 0){
+	Contato *nomeExiste;
+	while(1){
 		printf("\tAGENDA DE CONTATOS > FAVORITAR\n\n");
 		printf("QUAL O NOME DO CONTATO QUE DESEJA FAVORITAR: \n> ");
 		fflush(stdin);
 		gets(nome);
-		nomeExiste = verificaNome(iniciais, nome, favoritos);
-	}
-	system("cls");
-	return favoritos;
+		nomeExiste = verificaNome(iniciais, nome);
+		if(nomeExiste != NULL){
+			favoritos = inserirNosFavoritos(favoritos, nomeExiste);
+			return favoritos;
+		}else{
+			return favoritos;
+		}
+	}	
 }
 
 void mostrarFavoritos(Favorito *favoritos){
-	Favorito *p;
+	printf("\tAGENDA DE CONTATOS > MOSTRAR FAVORITOS\n\n");
 	if(favoritos == NULL){
-		printf("\nLista Vazia\n");
+		printf("A LISTA DE FAVORITOS ESTA VAZIA\n");
 	}else{
-		for(p=favoritos;p!=NULL;p=p->prox){
+		for(favoritos;favoritos!=NULL;favoritos=favoritos->prox){
 			printf("\nNOME: ");
-			puts(p->contato->nome);
+			puts(favoritos->contato->nome);
 			printf("SOBRENOME: ");
-			puts(p->contato->sobrenome);
+			puts(favoritos->contato->sobrenome);
 			printf("TELEFONE: ");
-			puts(p->contato->telefone);
+			puts(favoritos->contato->telefone);
 			printf("E-MAIL: ");
-			puts(p->contato->email);
+			puts(favoritos->contato->email);
 		}
 	}
+	printf("\n\n");
 	system("pause");
 	system("cls");
 }
