@@ -1,3 +1,4 @@
+// 
 typedef struct contato{
 	char nome[50], sobrenome[50], telefone[50], email[50];
 	struct contato *prox;
@@ -104,8 +105,7 @@ void mostrarTodos(Inicial *iniciais){
 	printf("\tAGENDA DE CONTATOS > MOSTRAR TODOS\n");
 	for(p=iniciais;p!=NULL;p=p->prox){
 		printf("\n> %c", toupper(p->letra));
-		
-			exibeContatos(p->listaDeContatos);
+		exibeContatos(p->listaDeContatos);
 	}
 	system("pause");
 	system("cls");
@@ -131,59 +131,68 @@ Contato *inserirNaListaDeContatos(Contato *contatos, Contato *contato){
 }
 
 //INSERIR UMA INICIAL DE FORMA ORDENADA
-Inicial *inserirNaListaDeIniciais(Contato *contato, Inicial *iniciais){
+Inicial *inserirNaListaDeIniciais(Inicial *iniciais, Contato *contato){
 	Inicial *novo, *p, *k, *aux;
 	Contato *contatos;
 	contatos = NULL;
 	char letra = toupper(contato->nome[0]);
-	if(iniciais == NULL){
+	
+	//SE A LISTA DE INICIAIS FOR NULA
+	if(iniciais == NULL){		
+		//ALOCA O ESPACO PARA O CONTATO SER INSERIDO
 		novo=(Inicial*) malloc(sizeof(Inicial));
 		novo->prox=NULL;
-		novo->letra = letra;
-				
+		novo->letra = letra;	
+			
 		contatos = inserirNaListaDeContatos(contatos, contato);
 		novo->listaDeContatos = contatos;
 		return novo;
-	}else{
-		for(p=iniciais;p!=NULL;p=p->prox){
-			if(letra == p->letra){
-				contatos = inserirNaListaDeContatos(p->listaDeContatos, contato);
-				return iniciais;
-			}
-		}
-		for(k=iniciais;k->prox!=NULL;k=k->prox);
-		novo = (Inicial*) malloc(sizeof(Inicial));
-		novo->letra = letra;
-		novo->prox= NULL;
-		
-		contatos = inserirNaListaDeContatos(contatos, contato);
-		novo->listaDeContatos = contatos;
-		
-		k->prox = novo;
-		return iniciais;
-		/*
-		for(p=iniciais;p->prox!=NULL;p=p->prox){
-			if(letra == p->letra){
-				contatos = inserirNaListaDeContatos(p->listaDeContatos, contato);
-				return iniciais;
-			}
-		}
-		for(k=iniciais;k->prox!=NULL;k=k->prox){
-			if((letra) - (k->letra) == 1){
-				novo=(Inicial*) malloc(sizeof(Inicial));
-				novo->letra = letra;
-				Contato *contatos;
-				contatos = NULL;
-				contatos = inserirNaListaDeContatos(contatos, contato);
-				novo->listaDeContatos = contatos;
-				
-				novo->prox = k->prox;
-				k->prox = novo;				
-				return iniciais;
-			}
-		}
-		*/
+	
 	}
+	//SE A LETRA FOR MENOR QUE O CABECA DA LISTA
+	else if(letra < iniciais->letra){	
+		//ALOCA O ESPACO PARA O CONTATO SER INSERIDO
+		novo=(Inicial*) malloc(sizeof(Inicial));
+		novo->letra = letra;
+		novo->prox = iniciais;
+		iniciais = novo;
+		contatos = inserirNaListaDeContatos(novo->listaDeContatos, contato);
+		novo->listaDeContatos = contatos;
+		return novo;
+	}
+	
+	//PERCORRE A LISTA
+	//SE A LETRA JA EXISTIR
+	for(p=iniciais;p!=NULL;p=p->prox){
+		
+		if(p->letra == letra){
+			//ALOCA O ESPACO PARA O CONTATO SER INSERIDO
+			novo=(Inicial*) malloc(sizeof(Inicial));
+			novo->prox=NULL;
+			novo->letra = letra;
+	
+			//INSERE O CONTATO NA LISTA DA LETRA					
+			p->listaDeContatos = inserirNaListaDeContatos(p->listaDeContatos, contato);
+			//RETORNA A CABECA
+			return iniciais;
+		}
+	}
+	//PERCORRE DENOVO
+	//SE A LETRA FOR ANTES
+	for(p=iniciais;p->prox != NULL;p=p->prox){
+		//VERIFICA
+		if(letra - p->letra == 1){
+			//ALOCA O ESPACO PARA O CONTATO SER INSERIDO
+			novo=(Inicial*) malloc(sizeof(Inicial));
+			novo->letra = letra;
+			
+			//INSERE O CONTATO NA LISTA DA LETRA
+			novo->prox = p->prox;
+			p->prox = novo;
+			p->listaDeContatos = inserirNaListaDeContatos(p->listaDeContatos, contato);
+			return iniciais;
+		}			
+	}		
 }
 
 //REMOVER CONTATO
