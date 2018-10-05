@@ -79,6 +79,7 @@ void mostrarContato(Inicial *iniciais,char letra){
 	}
 }
 
+//MOSTRA AS INICIAIS
 void mostrarIniciais(Inicial *iniciais){
 	Inicial *p;
 	char letra;
@@ -90,11 +91,13 @@ void mostrarIniciais(Inicial *iniciais){
 	fflush(stdin);
 	scanf("%c", &letra);
 	system("cls");
+	//MOSTRA OS CONTATOS DA INICIAL
 	mostrarContato(iniciais, toupper(letra));
 	system("pause");
 	system("cls");
 }
 
+//MOSTRA TODOS OS CONTATOS
 void mostrarTodos(Inicial *iniciais){
 	Inicial *p;
 	Contato *k;
@@ -108,7 +111,7 @@ void mostrarTodos(Inicial *iniciais){
 	system("cls");
 }
 
-//---------------------------------------------------------------------
+//INSERIR NOVO CONTATO
 Contato *inserirNaListaDeContatos(Contato *contatos, Contato *contato){
 	Contato *novo;
 	Contato *p;
@@ -127,6 +130,7 @@ Contato *inserirNaListaDeContatos(Contato *contatos, Contato *contato){
 	}
 }
 
+//INSERIR UMA INICIAL DE FORMA ORDENADA
 Inicial *inserirNaListaDeIniciais(Contato *contato, Inicial *iniciais){
 	Inicial *novo, *p, *k, *aux;
 	Contato *contatos;
@@ -182,9 +186,12 @@ Inicial *inserirNaListaDeIniciais(Contato *contato, Inicial *iniciais){
 	}
 }
 
+//REMOVER CONTATO
 remover(){
 	
 }
+
+//INSERE FAVORITOS
 Favorito *inserirNosFavoritos(Favorito *favoritos, Contato *contato){
 	Favorito *novo;
 	Favorito *p;
@@ -230,6 +237,7 @@ Favorito *inserirNosFavoritos(Favorito *favoritos, Contato *contato){
 	return favoritos;
 }
 
+//VERIFICA SE O NOME EXISTE
 Contato *verificaNome(Inicial *iniciais, char nome[50]){
 	char letra = toupper(nome[0]);
 	Inicial *p;
@@ -249,6 +257,7 @@ Contato *verificaNome(Inicial *iniciais, char nome[50]){
 	return NULL;
 }
 
+//FAVORITAR UM CONTATO
 Favorito *favoritar(Inicial *iniciais, Favorito *favoritos){
 	char nome[50];
 	Contato *nomeExiste;
@@ -267,6 +276,7 @@ Favorito *favoritar(Inicial *iniciais, Favorito *favoritos){
 	}	
 }
 
+//MOSTRA OS FAVORITOS
 void mostrarFavoritos(Favorito *favoritos){
 	printf("\tAGENDA DE CONTATOS > MOSTRAR FAVORITOS\n\n");
 	if(favoritos == NULL){
@@ -287,3 +297,5 @@ void mostrarFavoritos(Favorito *favoritos){
 	system("pause");
 	system("cls");
 }
+
+//REMOVER FAVORITO
