@@ -162,7 +162,6 @@ Inicial *inserirNaListaDeIniciais(Inicial *iniciais, Contato *contato){
 	//PERCORRE A LISTA
 	//SE A LETRA JA EXISTIR
 	for(p=iniciais;p!=NULL;p=p->prox){
-		
 		if(p->letra == letra){
 			//ALOCA O ESPACO PARA O CONTATO SER INSERIDO
 			novo=(Inicial*) malloc(sizeof(Inicial));
@@ -192,6 +191,7 @@ Inicial *inserirNaListaDeIniciais(Inicial *iniciais, Contato *contato){
 			return iniciais;
 		}			
 	}
+	//INSERE NO FINAL
 	if(p->prox == NULL){
 		//ALOCA O ESPACO PARA O CONTATO SER INSERIDO
 		novo=(Inicial*) malloc(sizeof(Inicial));
