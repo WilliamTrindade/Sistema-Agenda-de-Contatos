@@ -35,7 +35,7 @@ void pedirDados(Contato *novo){
 	printf("\tAGENDA DE CONTATOS > NOVO CONTATO\n\n");
 	printf("NOME: ");
 	fflush(stdin);
-	gets(novo->nome);	
+	gets(novo->nome);		
 	printf("SOBRENOME: ");
 	gets(novo->sobrenome);
 	printf("TELEFONE :");
@@ -147,7 +147,6 @@ Inicial *inserirNaListaDeIniciais(Inicial *iniciais, Contato *contato){
 		contatos = inserirNaListaDeContatos(contatos, contato);
 		novo->listaDeContatos = contatos;
 		return novo;
-	
 	}
 	//SE A LETRA FOR MENOR QUE O CABECA DA LISTA
 	else if(letra < iniciais->letra){	
@@ -155,8 +154,7 @@ Inicial *inserirNaListaDeIniciais(Inicial *iniciais, Contato *contato){
 		novo=(Inicial*) malloc(sizeof(Inicial));
 		novo->letra = letra;
 		novo->prox = iniciais;
-		iniciais = novo;
-		contatos = inserirNaListaDeContatos(novo->listaDeContatos, contato);
+		contatos = inserirNaListaDeContatos(contatos, contato);
 		novo->listaDeContatos = contatos;
 		return novo;
 	}
@@ -178,10 +176,10 @@ Inicial *inserirNaListaDeIniciais(Inicial *iniciais, Contato *contato){
 		}
 	}
 	//PERCORRE DENOVO
-	//SE A LETRA FOR ANTES
-	for(p=iniciais;p->prox != NULL;p=p->prox){
+	//INSERE NO MEIO
+	for(p=iniciais;p->prox!= NULL;p=p->prox){
 		//VERIFICA
-		if(letra - p->letra == 1){
+		if(p->prox->letra > letra){
 			//ALOCA O ESPACO PARA O CONTATO SER INSERIDO
 			novo=(Inicial*) malloc(sizeof(Inicial));
 			novo->letra = letra;
@@ -189,9 +187,22 @@ Inicial *inserirNaListaDeIniciais(Inicial *iniciais, Contato *contato){
 			//INSERE O CONTATO NA LISTA DA LETRA
 			novo->prox = p->prox;
 			p->prox = novo;
-			p->listaDeContatos = inserirNaListaDeContatos(p->listaDeContatos, contato);
+			contatos = inserirNaListaDeContatos(contatos, contato);
+			novo->listaDeContatos = contatos;
 			return iniciais;
 		}			
+	}
+	if(p->prox == NULL){
+		//ALOCA O ESPACO PARA O CONTATO SER INSERIDO
+		novo=(Inicial*) malloc(sizeof(Inicial));
+		novo->letra = letra;
+		
+		//INSERE O CONTATO NA LISTA DA LETRA
+		novo->prox = NULL;
+		p->prox = novo;
+		contatos = inserirNaListaDeContatos(contatos, contato);
+		novo->listaDeContatos = contatos;
+		return iniciais;
 	}		
 }
 
