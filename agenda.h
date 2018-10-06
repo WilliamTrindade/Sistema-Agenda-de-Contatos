@@ -322,6 +322,12 @@ Favorito *favoritar(Inicial *iniciais, Favorito *favoritos){
 		printf("QUAL O NOME DO CONTATO QUE DESEJA FAVORITAR: \n> ");
 		fflush(stdin);
 		gets(nome);
+		if(favoritoExiste(favoritos, nome) == 1){
+			printf("\nESSE CONTATO JA ESTA NA LISTA SORRY!\n\n");
+			system("pause");
+			system("cls");
+			return favoritos;
+		}
 		nomeExiste = verificaNome(iniciais, nome);
 		if(nomeExiste != NULL){
 			favoritos = inserirNosFavoritos(favoritos, nomeExiste);
@@ -334,20 +340,37 @@ Favorito *favoritar(Inicial *iniciais, Favorito *favoritos){
 
 //MOSTRA OS FAVORITOS
 void mostrarFavoritos(Favorito *favoritos){
+	Favorito *f;
 	printf("\tAGENDA DE CONTATOS > MOSTRAR FAVORITOS\n\n");
 	if(favoritos == NULL){
-		printf("A LISTA DE FAVORITOS ESTA VAZIA\n");
+		printf("A LISTA DE FAVORITOS ESTA VAZIA\n\n");
+		system("pause");
+		system("cls");
+		return;
 	}else{
-		for(favoritos;favoritos!=NULL;favoritos=favoritos->prox){
+		f = favoritos;
+		if(f->prox == NULL){
 			printf("\nNOME: ");
-			puts(favoritos->contato->nome);
+			puts(f->contato->nome);
 			printf("SOBRENOME: ");
-			puts(favoritos->contato->sobrenome);
+			puts(f->contato->sobrenome);
 			printf("TELEFONE: ");
-			puts(favoritos->contato->telefone);
+			puts(f->contato->telefone);
 			printf("E-MAIL: ");
-			puts(favoritos->contato->email);
+			puts(f->contato->email);
+		}else{
+			for(f=favoritos;f!=NULL;f=f->prox){
+				printf("\nNOME: ");
+				puts(f->contato->nome);
+				printf("SOBRENOME: ");
+				puts(f->contato->sobrenome);
+				printf("TELEFONE: ");
+				puts(f->contato->telefone);
+				printf("E-MAIL: ");
+				puts(f->contato->email);
+			}
 		}
+		
 	}
 	printf("\n\n");
 	system("pause");
@@ -364,9 +387,9 @@ int favoritoExiste(Favorito *favoritos, char nome[50]){
 	}
 	return 0;
 }
-//remover favorito estou qui
+
 //REMOVER FAVORITO
-void removerFavorito(Favorito *favoritos){
+Favorito *removerFavorito(Favorito *favoritos){
 	Favorito *f;
 	Favorito *retirar;
 	Favorito *anterior;
@@ -374,25 +397,54 @@ void removerFavorito(Favorito *favoritos){
 	printf("\tAGENDA DE CONTATOS > REMOVER FAVORITO\n\n");
 	if(favoritos == NULL){
 		printf("\nA LISTA DE FAVORITOS ESTA VAZIA!\n\n");
+		system("pause");
+		system("cls");
+		return favoritos;
 	}else{
-		do{
-			printf("DIGITE O NOME: ");
-			fflush(stdin);
-			gets(nome);	
-		}while(favoritoExiste(favoritos, nome) == 0);
-		
-		//ECNCONTRO O INDICE A SER RETIRADO
-		for(f=favoritos;f!=NULL;f=f->prox){
-			if(strcmp(f->prox->contato->nome, nome) == 0){
-				retirar = f->prox;
-				anterior = f;
+		printf("DIGITE O NOME: ");
+		fflush(stdin);
+		gets(nome);	
+		if(favoritoExiste(favoritos, nome) == 1){		
+			//SE QUISER REMOVER A CABECA DA LISTA
+			f = favoritos;
+			if(strcmp(f->contato->nome, nome) == 0){
+				Favorito *novoCabeca;
+				novoCabeca = f->prox;
+				free(f);
+				printf("\nFAVORITO REMOVIDO COM SUCESSO\n\n");
+				system("pause");
+				system("cls");
+				return novoCabeca;
+			}
+			//SE SO EXISTE UM VALOR NA LISTA
+			f = favoritos;
+			if(f->prox==NULL){
+				printf("\nFAVORITO REMOVIDO COM SUCESSO\n\n");
+				system("pause");
+				system("cls");
+				return NULL;
+			}else{
+				//ECNCONTRO O INDICE A SER RETIRADO
+				for(f=favoritos;f->prox!=NULL;f=f->prox){
+					if(strcmp(f->prox->contato->nome, nome) == 0){
+						retirar = f->prox;
+						anterior = f;
+						anterior->prox = retirar->prox;
+						free(retirar);
+						printf("\nFAVORITO REMOVIDO COM SUCESSO\n\n");
+						system("pause");
+						system("cls");
+						return favoritos;
+					}
+				}
 			}
 		}
-		if(favoritos->prox==NULL){
-			free(favoritos);
-		}else{
-			anterior->prox = retirar->prox;
-			free(retirar);
+		//SE O NOME NAO EXISTE NA LISTA
+		else{
+			printf("\nNOME NAO EXISTE! \n");
+			system("pause");
+			system("cls");
+			return favoritos;	
 		}
 	}
 }

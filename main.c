@@ -42,7 +42,7 @@ int main(){
 				break;
 			}
 			case 7:{
-				removerFavorito(favoritos);
+				favoritos = removerFavorito(favoritos);
 				break;
 			}
 			case 8:{
