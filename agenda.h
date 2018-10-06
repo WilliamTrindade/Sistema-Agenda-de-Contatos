@@ -1,4 +1,4 @@
-// 
+//ESTRUTURA
 typedef struct contato{
 	char nome[50], sobrenome[50], telefone[50], email[50];
 	struct contato *prox;
@@ -224,8 +224,27 @@ Inicial *inserirNaListaDeIniciais(Inicial *iniciais, Contato *contato){
 }
 
 //REMOVER CONTATO
-remover(){
+Inicial *remover(Inicial *iniciais, Favorito *favoritos){
+	Inicial *p;
+	Contato *k;
+	char nome[50];
+	char letra = nome[0];
+	printf("\tAGENDA DE CONTATOS > APAGAR CONTATO\n");
+	do{
+		printf("DIGITE O NOME: ");
+		fflush(stdin);
+		gets(nome);	
+	}while(nomeJaExiste(iniciais, nome) == 0);
 	
+	for(p=iniciais;p!=NULL;p=p->prox){
+		if(p->letra == letra){
+			for(k=p->listaDeContatos;k!=NULL;k=k->prox){
+				if(strcmp(nome, k->nome) == 0){
+					//trabalhando aqui
+				}
+			}
+		}
+	}
 }
 
 //INSERE FAVORITOS
@@ -335,4 +354,47 @@ void mostrarFavoritos(Favorito *favoritos){
 	system("cls");
 }
 
+//VERIFICA SE O NOME CONSTA NO FAVORITOS
+int favoritoExiste(Favorito *favoritos, char nome[50]){
+	Favorito *f;
+	for(f=favoritos;f!=NULL;f=f->prox){
+		if(strcmp(f->contato->nome, nome) == 0){
+			return 1;
+		}
+	}
+	return 0;
+}
+//remover favorito estou qui
 //REMOVER FAVORITO
+void removerFavorito(Favorito *favoritos){
+	Favorito *f;
+	Favorito *retirar;
+	Favorito *anterior;
+	char nome[50];
+	printf("\tAGENDA DE CONTATOS > REMOVER FAVORITO\n\n");
+	if(favoritos == NULL){
+		printf("\nA LISTA DE FAVORITOS ESTA VAZIA!\n\n");
+	}else{
+		do{
+			printf("DIGITE O NOME: ");
+			fflush(stdin);
+			gets(nome);	
+		}while(favoritoExiste(favoritos, nome) == 0);
+		
+		//ECNCONTRO O INDICE A SER RETIRADO
+		for(f=favoritos;f!=NULL;f=f->prox){
+			if(strcmp(f->prox->contato->nome, nome) == 0){
+				retirar = f->prox;
+				anterior = f;
+			}
+		}
+		if(favoritos->prox==NULL){
+			free(favoritos);
+		}else{
+			anterior->prox = retirar->prox;
+			free(retirar);
+		}
+	}
+}
+
+
