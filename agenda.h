@@ -31,11 +31,14 @@ int menu(){
 }
 
 //PEDIR OS DADOS AO USER
-void pedirDados(Contato *novo){
+void pedirDados(Inicial *iniciais, Contato *novo){
 	printf("\tAGENDA DE CONTATOS > NOVO CONTATO\n\n");
-	printf("NOME: ");
-	fflush(stdin);
-	gets(novo->nome);		
+	//IMPEDE QUE O USUARIO DIGITE 2 NOMES IGUAIS
+	do{
+		printf("NOME: ");
+		fflush(stdin);
+		gets(novo->nome);	
+	}while(nomeJaExiste(iniciais, novo->nome) == 1);
 	printf("SOBRENOME: ");
 	gets(novo->sobrenome);
 	printf("TELEFONE :");
@@ -62,7 +65,21 @@ void exibeContatos(Contato *contatos){
 		puts(p->email);
 	}
 }
-
+int nomeJaExiste(Inicial *iniciais, char nome[50]){
+	char letra = toupper(nome[0]);
+	Inicial *p;
+	Contato *k;
+	for(p=iniciais;p!=NULL;p=p->prox){
+		if(letra == p->letra){
+			for(k=p->listaDeContatos;k!=NULL;k=k->prox){
+				if(strcmp(nome, k->nome) == 0){
+					return 1;
+				}
+			}
+		}
+	}
+	return 0;
+}
 //PROCURA A INICIAL
 void mostrarContato(Inicial *iniciais,char letra){
 	Inicial *p;

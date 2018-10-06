@@ -17,7 +17,7 @@ int main(){
 			case 1:{
 				Contato *novo;
 				novo = (Contato*) malloc(sizeof(Contato));
-				pedirDados(novo);
+				pedirDados(iniciais, novo);
 				iniciais = inserirNaListaDeIniciais(iniciais, novo);
 				break;
 			}
