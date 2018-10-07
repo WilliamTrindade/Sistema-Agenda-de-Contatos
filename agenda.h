@@ -223,28 +223,105 @@ Inicial *inserirNaListaDeIniciais(Inicial *iniciais, Contato *contato){
 	}		
 }
 
-//REMOVER CONTATO
-Inicial *remover(Inicial *iniciais, Favorito *favoritos){
-	Inicial *p;
-	Contato *k;
-	char nome[50];
-	char letra = nome[0];
-	printf("\tAGENDA DE CONTATOS > APAGAR CONTATO\n");
-	do{
-		printf("DIGITE O NOME: ");
-		fflush(stdin);
-		gets(nome);	
-	}while(nomeJaExiste(iniciais, nome) == 0);
+//REMOVER LETRA
+Inicial *removerInicial(Inicial *iniciais, char letra){
+	Contato *c;
+	Inicial *i;
+	Inicial *ant;
+	Inicial *rem;
 	
-	for(p=iniciais;p!=NULL;p=p->prox){
-		if(p->letra == letra){
-			for(k=p->listaDeContatos;k!=NULL;k=k->prox){
-				if(strcmp(nome, k->nome) == 0){
-					//trabalhando aqui
-				}
+	letra = toupper(letra);
+	for(i=iniciais;i!=NULL;i=i->prox){
+		//verifica o proximo para preservar o anterior
+		if(i->prox->letra == letra){
+			rem = i->prox;
+			ant = i;
+			ant->prox = rem->prox;
+			free(rem);
+			return iniciais;
+		}
+		
+		//so entra na primeira letra
+		if(i->letra == letra){
+			//se for a primeira letra
+			if(i->letra == letra && iniciais->letra == letra){
+				Inicial *novaCabeca;
+				novaCabeca = i->prox;
+				free(i);
+				return novaCabeca;
 			}
 		}
 	}
+}
+
+//REMOVER CONTATO
+Inicial *remover(Inicial *iniciais, Favorito *favoritos){
+	printf("\tAGENDA DE CONTATOS > REMOVER\n");
+	Inicial *i;
+	Contato *c;
+	Contato *ant;
+	Contato *rem;
+	char nome[50];
+	char letra;
+	if(iniciais == NULL){
+		printf("\nPRIMEIRO INSIRA CONTATOS! \n");
+		system("pause");
+		system("cls");
+		return NULL;
+	}else{
+		do{
+			printf("DIGITE UM NOME : ");
+			fflush(stdin);
+			gets(nome);	
+		}while(nomeJaExiste(iniciais, nome) != 1);
+		for(i=iniciais;i!=NULL;i=i->prox){
+			//se so tiver um valor
+			if(iniciais->prox == NULL){
+				free(iniciais);
+				return NULL;
+			}
+			for(c=i->listaDeContatos;c->prox!=NULL;c=c->prox){
+				//passa verificando o proximo para manter o anterior
+				if(strcmp(c->prox->nome, nome) == 0){
+					rem = c->prox;
+					ant = c;
+					ant->prox = rem->prox;
+					free(rem);
+					printf("\nCONTATO REMOVIDO COM SUCESSO\n\n");
+					system("pause");
+					system("cls");
+					return iniciais;
+				}
+			
+				//so o primeiro contato pode entrar nesse for
+				//desse modo perde-se o anterior
+				if(strcmp(c->nome, nome) == 0){
+					//se o contato for o primeiro devo remover a letra e retorna-la no contato
+					if(c->prox == NULL){
+						//remove a inicial e remove o contato ja
+						iniciais = removerInicial(iniciais, nome[0]);
+						printf("\nCONTATO REMOVIDO COM SUCESSO\n\n");
+						system("pause");
+						system("cls");
+						return iniciais;
+					}
+					//se o contato for o primeiro mas nao for o unico da lista eu apenas removo ele
+					else{
+						Contato *novaCabeca;
+						novaCabeca = c->prox;
+						free(c);
+						printf("\nCONTATO REMOVIDO COM SUCESSO\n\n");
+						system("pause");
+						system("cls");
+						i->listaDeContatos = novaCabeca;
+						return iniciais;
+					}					
+				}			
+			}
+		}
+	}
+	printf("saiu forA");
+	return iniciais;
 }
 
 //INSERE FAVORITOS

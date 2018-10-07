@@ -22,7 +22,7 @@ int main(){
 				break;
 			}
 			case 2:{
-				//remover(iniciais, favoritos);
+				iniciais = remover(iniciais, favoritos);
 				break;
 			}
 			case 3:{
