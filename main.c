@@ -18,12 +18,25 @@ int main(){
 				Contato *novo;
 				novo = (Contato*) malloc(sizeof(Contato));
 				pedirDados(iniciais, novo);
-				iniciais = inserirNaListaDeIniciais(iniciais, novo);
+				iniciais = inserirNaListaDeIniciais(iniciais, novo);			
 				break;
 			}
 			
 			case 2:{
-				iniciais = remover(iniciais, favoritos);
+				printf("\tAGENDA DE CONTATOS > REMOVER\n");
+				char nome[50];
+				do{
+					printf("DIGITE UM NOME : ");
+					fflush(stdin);
+					gets(nome);	
+				}while(nomeJaExiste(iniciais, nome) != 1);
+				
+				//removo o contato da lista 
+				//e removo dos favoritos caso existir
+				iniciais = remover(iniciais, favoritos, nome);
+				favoritos = removerFavoritoDosContatos(favoritos, nome);
+				system("pause");
+				system("cls");
 				break;
 			}
 			case 3:{

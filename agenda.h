@@ -8,6 +8,7 @@ typedef struct inicial{
 	char letra;
 	struct contato *listaDeContatos;
 	struct inicial *prox;
+	struct favorito *fav;
 }Inicial;
 
 typedef struct favorito{
@@ -256,69 +257,6 @@ Inicial *removerInicial(Inicial *iniciais, char letra){
 	}
 }
 
-//REMOVER CONTATO
-Inicial *remover(Inicial *iniciais, Favorito *favoritos){
-	printf("\tAGENDA DE CONTATOS > REMOVER\n");
-	Inicial *i;
-	i = iniciais;
-	Contato *c;
-	Inicial *iAnt;
-	Inicial *iRem;
-	Contato *cAnt;
-	Contato *cRem;
-	
-	char nome[50];
-	char letra;
-	if(iniciais == NULL){
-		printf("\nPRIMEIRO INSIRA CONTATOS! \n");
-		system("pause");
-		system("cls");
-		return NULL;
-	}else{
-		do{
-			printf("DIGITE UM NOME : ");
-			fflush(stdin);
-			gets(nome);	
-		}while(nomeJaExiste(iniciais, nome) != 1);
-		letra = toupper(nome[0]);
-		//se so existe uma inicial e um contato
-		if(iniciais->listaDeContatos->prox == NULL && iniciais->prox == NULL){
-			printf("\nAGORA A LISTA DE LETRAS ESTA VAZIA \nCONTATO REMOVIDO COM SUCESSO! \n");
-			system("pause");
-			system("cls");
-			return NULL;
-		}
-		
-		//procura a inicial
-		while(i != NULL && i->letra != letra){
-			iAnt = i;
-			i = i -> prox;
-		}
-		 
-		//se so existe um contato na lista da inicial apaga apenas uma inicial
-		if(i->listaDeContatos->prox == NULL){
-			printf("\nNAO EXISTEM MAIS CONTATOS NA LETRA %c\nCONTATO REMOVIDO COM SUCESSO! \n", letra);
-			system("pause");
-			system("cls");
-			iniciais = removerInicial(iniciais, letra);
-			return iniciais;
-		}
-		
-		//procura o contato na lista
-		c = i->listaDeContatos;
-		while(c != NULL && strcmp(c->nome, nome) != 0){
-			cAnt = c;
-			c=c->prox;
-		}
-		printf("\nCONTATO REMOVIDO COM SUCESSO! \n");
-		system("pause");
-		system("cls");
-		cAnt->prox = c->prox;
-		free(c);
-		return iniciais;
-	}
-}
-
 //INSERE FAVORITOS
 Favorito *inserirNosFavoritos(Favorito *favoritos, Contato *contato){
 	Favorito *novo;
@@ -521,4 +459,104 @@ Favorito *removerFavorito(Favorito *favoritos){
 	}
 }
 
+//REMOVER FAVORITO DOS CONTATOS
+Favorito *removerFavoritoDosContatos(Favorito *favoritos, char nome[50]){
+	Favorito *f;
+	Favorito *retirar;
+	Favorito *anterior;
+	if(favoritos == NULL){
+		printf("\nA LISTA DE FAVORITOS ESTA VAZIA!\n\n");
+		return favoritos;
+	}else{
+		if(favoritoExiste(favoritos, nome) == 1){		
+			//SE QUISER REMOVER A CABECA DA LISTA
+			f = favoritos;
+			if(strcmp(f->contato->nome, nome) == 0){
+				Favorito *novoCabeca;
+				novoCabeca = f->prox;
+				free(f);
+				printf("\nFAVORITO REMOVIDO COM SUCESSO\n\n");
+				return novoCabeca;
+			}
+			//SE SO EXISTE UM VALOR NA LISTA
+			f = favoritos;
+			if(f->prox==NULL){
+				printf("\nFAVORITO REMOVIDO COM SUCESSO\n\n");
+				return NULL;
+			}else{
+				//ECNCONTRO O INDICE A SER RETIRADO
+				for(f=favoritos;f->prox!=NULL;f=f->prox){
+					if(strcmp(f->prox->contato->nome, nome) == 0){
+						retirar = f->prox;
+						anterior = f;
+						anterior->prox = retirar->prox;
+						free(retirar);
+						printf("\nFAVORITO REMOVIDO COM SUCESSO\n\n");
+						return favoritos;
+					}
+				}
+			}
+		}
+		//SE O NOME NAO EXISTE NA LISTA
+		else{
+			return favoritos;	
+		}
+	}
+}
+
+//REMOVER CONTATO
+Inicial *remover(Inicial *iniciais, Favorito *favoritos, char nome[50]){
+	Inicial *i;
+	i = iniciais;
+	Contato *c;
+	Inicial *iAnt;
+	Inicial *iRem;
+	Contato *cAnt;
+	Contato *cRem;
+	char letra;
+	if(iniciais == NULL){
+		printf("\nPRIMEIRO INSIRA CONTATOS! \n");
+		system("pause");
+		system("cls");
+		return NULL;
+	}else{
+		letra = toupper(nome[0]);
+		
+		//se so existe uma inicial e um contato
+		if(iniciais->listaDeContatos->prox == NULL && iniciais->prox == NULL){
+			printf("\nAGORA A LISTA DE LETRAS ESTA VAZIA \nCONTATO REMOVIDO COM SUCESSO! \n");
+			system("pause");
+			system("cls");
+			return NULL;
+		}
+		
+		//procura a inicial
+		while(i != NULL && i->letra != letra){
+			iAnt = i;
+			i = i -> prox;
+		}
+		 
+		//se so existe um contato na lista da inicial apaga apenas uma inicial
+		if(i->listaDeContatos->prox == NULL){
+			printf("\nNAO EXISTEM MAIS CONTATOS NA LETRA %c\nCONTATO REMOVIDO COM SUCESSO! \n", letra);
+			system("pause");
+			system("cls");
+			iniciais = removerInicial(iniciais, letra);
+			return iniciais;
+		}
+		
+		//procura o contato na lista
+		c = i->listaDeContatos;
+		while(c != NULL && strcmp(c->nome, nome) != 0){
+			cAnt = c;
+			c=c->prox;
+		}
+		printf("\nCONTATO REMOVIDO COM SUCESSO! \n");
+		system("pause");
+		system("cls");
+		cAnt->prox = c->prox;
+		free(c);
+		return iniciais;
+	}
+}
 
