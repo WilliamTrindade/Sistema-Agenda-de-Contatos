@@ -21,6 +21,7 @@ int main(){
 				iniciais = inserirNaListaDeIniciais(iniciais, novo);
 				break;
 			}
+			
 			case 2:{
 				iniciais = remover(iniciais, favoritos);
 				break;
