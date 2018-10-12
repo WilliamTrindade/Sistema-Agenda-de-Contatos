@@ -597,9 +597,18 @@ Inicial *remover(Inicial *iniciais, Favorito *favoritos, char nome[50]){
 		iniciais = removerInicial(iniciais, letra);
 		return iniciais;
 	}
-		
-	//procura o contato na lista
+	Contato *aux;	
 	c = i->listaDeContatos;
+	//se tiver que remover o primeiro
+	if(strcmp(c->nome, nome) == 0){
+		aux =i->listaDeContatos->prox;
+		i->listaDeContatos = aux;
+		printf("\nPRIMEIRO CONTATO REMOVIDO COM SUCESSO! \n");
+		system("pause");
+		system("cls");
+		return iniciais;
+	}
+	//procura o contato na lista
 	while(c != NULL && strcmp(c->nome, nome) != 0){
 		cAnt = c;
 		c=c->prox;
