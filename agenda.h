@@ -141,12 +141,70 @@ Contato *inserirNaListaDeContatos(Contato *contatos, Contato *contato){
 		novo->prox=NULL;
 		return novo;
 	}else{
+		
+		//SE A LISTA TIVER APENAS UM NOME
+		//se o nome que qeuero inserir for menor
+		if(strcmp(contato->nome,contatos->nome)<0 && contatos->prox == NULL){
+			novo=(Contato*) malloc(sizeof(Contato));
+			novo=contato;
+			
+			novo->prox = contatos;
+			contatos->prox == NULL;
+			return novo;
+		}
+		//se o nome que quero inserir for maior
+		if(strcmp(contato->nome,contatos->nome)>0 && contatos->prox == NULL){
+			novo=(Contato*) malloc(sizeof(Contato));
+			novo=contato;
+			
+			contatos->prox = novo;
+			novo->prox == NULL;
+			return contatos;
+		}
+		
+		//SE TIVER QUE INSERIR ANTES DA LISTA
+		if(strcmp(contato->nome,contatos->nome)<0){
+			Contato *aux;
+			novo=(Contato*) malloc(sizeof(Contato));
+			novo=contato;
+			novo->prox = contatos;
+			return novo;
+		}
+		
+		//SE TIVER QUE INSRIR DEPOS DA LISTA
+		for(p=contatos;p->prox!=NULL;p=p->prox);
+		if(strcmp(contato->nome,p->nome) > 0){
+			novo=(Contato*) malloc(sizeof(Contato));
+			novo=contato;
+			novo->prox=NULL;
+			p->prox=novo;
+			return contatos;
+		}
+		
+		//SE QUISER INSERIR CASO JÁ EXISTA AO MENOS 2 CONTATOS
+		Contato *aux;
+		/*
+		*insere no final desordenada
 		for(p=contatos;p->prox!=NULL;p=p->prox);
 		novo = (Contato*) malloc(sizeof(Contato));
 		novo = contato;
 		novo -> prox = NULL;
 		p->prox = novo;
+		return contatos;*/
+		
+		//insere ordenada
+		//percorro até encontrar onde devo colocalo
+		//como já definido(nunca havera contatos com nome igual)
+		for(p=contatos;strcmp(contato->nome,p->prox->nome)<0;p=p->prox);
+		novo = (Contato*) malloc(sizeof(Contato));
+		novo = contato;
+		
+		aux = p->prox;
+		p->prox = novo;
+		novo->prox = aux;
 		return contatos;
+		
+	
 	}
 }
 
