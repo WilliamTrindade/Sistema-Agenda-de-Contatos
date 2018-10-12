@@ -24,17 +24,21 @@ int main(){
 			
 			case 2:{
 				printf("\tAGENDA DE CONTATOS > REMOVER\n");
-				char nome[50];
-				do{
-					printf("DIGITE UM NOME : ");
-					fflush(stdin);
-					gets(nome);	
-				}while(nomeJaExiste(iniciais, nome) != 1);
+				if(iniciais == NULL){
+					printf("\nPRIMEIRO INSIRA CONTATOS! \n");
+				}else{
+					char nome[50];
+					do{
+						printf("DIGITE UM NOME : ");
+						fflush(stdin);
+						gets(nome);	
+					}while(nomeJaExiste(iniciais, nome) != 1);
 				
-				//removo o contato da lista 
-				//e removo dos favoritos caso existir
-				iniciais = remover(iniciais, favoritos, nome);
-				favoritos = removerFavoritoDosContatos(favoritos, nome);
+					//removo o contato da lista 
+					//e removo dos favoritos caso existir
+					iniciais = remover(iniciais, favoritos, nome);
+					favoritos = removerFavoritoDosContatos(favoritos, nome);
+				}
 				system("pause");
 				system("cls");
 				break;

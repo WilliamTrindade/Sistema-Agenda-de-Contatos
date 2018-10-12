@@ -514,49 +514,44 @@ Inicial *remover(Inicial *iniciais, Favorito *favoritos, char nome[50]){
 	Contato *cAnt;
 	Contato *cRem;
 	char letra;
-	if(iniciais == NULL){
-		printf("\nPRIMEIRO INSIRA CONTATOS! \n");
+	
+	letra = toupper(nome[0]);
+		
+	//se so existe uma inicial e um contato
+	if(iniciais->listaDeContatos->prox == NULL && iniciais->prox == NULL){
+		printf("\nAGORA A LISTA DE LETRAS ESTA VAZIA \nCONTATO REMOVIDO COM SUCESSO! \n");
 		system("pause");
 		system("cls");
 		return NULL;
-	}else{
-		letra = toupper(nome[0]);
-		
-		//se so existe uma inicial e um contato
-		if(iniciais->listaDeContatos->prox == NULL && iniciais->prox == NULL){
-			printf("\nAGORA A LISTA DE LETRAS ESTA VAZIA \nCONTATO REMOVIDO COM SUCESSO! \n");
-			system("pause");
-			system("cls");
-			return NULL;
-		}
-		
-		//procura a inicial
-		while(i != NULL && i->letra != letra){
-			iAnt = i;
-			i = i -> prox;
-		}
+	}
+	
+	//procura a inicial
+	while(i != NULL && i->letra != letra){
+		iAnt = i;
+		i = i -> prox;
+	}
 		 
-		//se so existe um contato na lista da inicial apaga apenas uma inicial
-		if(i->listaDeContatos->prox == NULL){
-			printf("\nNAO EXISTEM MAIS CONTATOS NA LETRA %c\nCONTATO REMOVIDO COM SUCESSO! \n", letra);
-			system("pause");
-			system("cls");
-			iniciais = removerInicial(iniciais, letra);
-			return iniciais;
-		}
-		
-		//procura o contato na lista
-		c = i->listaDeContatos;
-		while(c != NULL && strcmp(c->nome, nome) != 0){
-			cAnt = c;
-			c=c->prox;
-		}
-		printf("\nCONTATO REMOVIDO COM SUCESSO! \n");
+	//se so existe um contato na lista da inicial apaga apenas uma inicial
+	if(i->listaDeContatos->prox == NULL){
+		printf("\nNAO EXISTEM MAIS CONTATOS NA LETRA %c\nCONTATO REMOVIDO COM SUCESSO! \n", letra);
 		system("pause");
 		system("cls");
-		cAnt->prox = c->prox;
-		free(c);
+		iniciais = removerInicial(iniciais, letra);
 		return iniciais;
 	}
+		
+	//procura o contato na lista
+	c = i->listaDeContatos;
+	while(c != NULL && strcmp(c->nome, nome) != 0){
+		cAnt = c;
+		c=c->prox;
+	}
+	
+	printf("\nCONTATO REMOVIDO COM SUCESSO! \n");
+	system("pause");
+	system("cls");
+	cAnt->prox = c->prox;
+	free(c);
+	return iniciais;
 }
 
